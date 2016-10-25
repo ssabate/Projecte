@@ -35,6 +35,7 @@ public class ProjecteJava {
             System.out.println("2. Modificar pilot.");
             System.out.println("3. Borrar pilot.");
             System.out.println("4. Llistar pilots.");
+            System.out.println("5. Altres.");
             switch (opcio = ent.nextInt()) {
                 case 0:
                     System.out.println("Adéu!!");
