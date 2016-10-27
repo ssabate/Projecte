@@ -18,13 +18,12 @@ public class ProjecteJava {
      */
     public static void main(String[] args) {
         // Les meues propietats        
-        String nom=null;
-        int dorsal=0;
-        boolean home=false;
-        double dinersGuanyats=0.0;
-        char tipo=' ';
-        
-        
+        String nom = null;
+        int dorsal = 0;
+        boolean home = false;
+        double dinersGuanyats = 0.0;
+        boolean omplit = false;
+
         Scanner ent = new Scanner(System.in);
         int opcio;
 
@@ -36,17 +35,37 @@ public class ProjecteJava {
             System.out.println("3. Borrar pilot.");
             System.out.println("4. Llistar pilots.");
             System.out.println("5. Altres.");
-            switch (opcio = ent.nextInt()) {
+            switch (opcio = ent.skip("[\r\n]*").nextInt()) {
                 case 0:
                     System.out.println("Adéu!!");
                     break;
-                case 1:        
+                case 1:
+                    if (!omplit) {
+                        System.out.println("Nom:");
+                        nom = ent.skip("[\r\n]*").nextLine();
+                        System.out.println("Dorsal:");
+                        dorsal = ent.skip("[\r\n]*").nextInt();
+                        System.out.println("Diners guanyats:");
+                        dinersGuanyats = ent.skip("[\r\n]*").nextDouble();
+
+                        char esHome;
+                        do {
+                            System.out.println("És home o dona?(H/D):");
+                            esHome = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
+                                                                                                //per tant només haurem de tractar les lletres majúscules
+                        } while (esHome != 'H' && esHome != 'D');
+                        home = (esHome == 'H');     //si esHome conté la 'H' home serà true i sinó false. Fa el mateix que un if_else però és molt més curt
+                        omplit = true;
+                    } else {
+                        System.out.println("No hi ha pilots per omplir, si vols primer borran.");
+                    }
                     break;
                 case 2:
                     break;
                 case 3:
                     break;
                 case 4:
+                    
                     break;
                 default:
                     System.out.println("Opció incorrecta!!\n\n");
