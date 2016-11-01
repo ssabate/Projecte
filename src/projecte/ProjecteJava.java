@@ -41,7 +41,7 @@ public class ProjecteJava {
                     break;
                 case 1:
                     if (!omplit) {
-                        System.out.println("Nom:");
+                        System.out.println("\nNom:");
                         nom = ent.skip("[\r\n]*").nextLine();
                         System.out.println("Dorsal:");
                         dorsal = ent.skip("[\r\n]*").nextInt();
@@ -57,18 +57,45 @@ public class ProjecteJava {
                         home = (esHome == 'H');     //si esHome conté la 'H' home serà true i sinó false. Fa el mateix que un if_else però és molt més curt
                         omplit = true;
                     } else {
-                        System.out.println("No hi ha pilots per omplir, si vols primer borran.");
+                        System.out.println("\nNo hi ha pilots per omplir, si vols primer borra'n.");
                     }
                     break;
                 case 2:
                     break;
                 case 3:
+                    if (omplit) {
+
+                        char siNo;
+                        do {
+                            System.out.println("\nVols vore el pilot?(S/N):");
+                            siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
+                                                                                                //per tant només haurem de tractar les lletres majúscules
+                        } while (siNo != 'S' && siNo != 'N');
+                        if (siNo == 'S'){
+                            System.out.println("\nNom: "+nom);
+                            System.out.println("Dorsal: "+dorsal);
+                            System.out.println("Diners guanyats: "+dinersGuanyats);
+                        }     
+
+                        do {
+                            System.out.println("\nVols borrar el pilot?(S/N):");
+                            siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
+                                                                                                //per tant només haurem de tractar les lletres majúscules
+                        } while (siNo != 'S' && siNo != 'N');
+                        if (siNo == 'S'){
+                            omplit = false;       
+                            System.out.println("Pilot borrat correctament.");
+                        } else System.out.println("Pilot no borrat.");  
+                        
+                    } else {
+                        System.out.println("\nNo hi ha pilots per borrar, si vols primer crea'n.");
+                    }
                     break;
                 case 4:
                     
                     break;
                 default:
-                    System.out.println("Opció incorrecta!!\n\n");
+                    System.out.println("\nOpció incorrecta!!");
             }
         } while (opcio != 0);
 
