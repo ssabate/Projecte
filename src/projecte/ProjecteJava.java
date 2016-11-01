@@ -34,7 +34,7 @@ public class ProjecteJava {
             System.out.println("2. Modificar pilot.");
             System.out.println("3. Borrar pilot.");
             System.out.println("4. Llistar pilots.");
-            System.out.println("5. Altres.");
+            System.out.println("5. Recuperar pilot borrat.");
             switch (opcio = ent.skip("[\r\n]*").nextInt()) {
                 case 0:
                     System.out.println("Adéu!!");
@@ -92,7 +92,44 @@ public class ProjecteJava {
                     }
                     break;
                 case 4:
+                    if (omplit) {
+                        System.out.println("\nNom: "+nom);
+                        System.out.println("Dorsal: "+dorsal);
+                        System.out.println("Diners guanyats: "+dinersGuanyats);                        
+                    } else {
+                        System.out.println("\nNo hi ha pilots per mostrar, si vols primer crea'n.");
+                    }                    
+                    break;
+                case 5:
                     
+                    if (!omplit) {
+
+                        char siNo;
+                        do {
+                            System.out.println("\nVols vore el pilot?(S/N):");
+                            siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
+                                                                                                //per tant només haurem de tractar les lletres majúscules
+                        } while (siNo != 'S' && siNo != 'N');
+                        if (siNo == 'S'){
+                            System.out.println("\nNom: "+nom);
+                            System.out.println("Dorsal: "+dorsal);
+                            System.out.println("Diners guanyats: "+dinersGuanyats);
+                        }     
+
+                        do {
+                            System.out.println("\nVols recuperar el pilot?(S/N):");
+                            siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
+                                                                                                //per tant només haurem de tractar les lletres majúscules
+                        } while (siNo != 'S' && siNo != 'N');
+                        if (siNo == 'S'){
+                            omplit = true;       
+                            System.out.println("Pilot recuperat correctament.");
+                        } else System.out.println("Pilot no recuperat.");  
+                        
+                    } else {
+                        System.out.println("\nNo hi ha pilots per recuperar, si vols primer borra'n.");
+                    }
+
                     break;
                 default:
                     System.out.println("\nOpció incorrecta!!");
