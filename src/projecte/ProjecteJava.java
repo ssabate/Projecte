@@ -13,61 +13,33 @@ import java.util.Scanner;
  */
 public class ProjecteJava {
 
-    public static final int MAX_PILOTS=2;
-    
+    //Número de caselles màxim de l'array
+    private static final int MAX_PILOTS=5;
+    //Array on guardarem la informació dels pilots
+    private static Pilot[] array=new Pilot[MAX_PILOTS];
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        //Variables locals del main
         Scanner ent = new Scanner(System.in);
-        //Array on guardarem la informació dels pilots
-        Pilot[] array=new Pilot[MAX_PILOTS];
+        int opcio;      //opció del menú
         
+        //Inicialitzem l'array en nous pilots sense dades
         for (int i = 0; i < array.length; i++) {
             array[i]=new Pilot();
-            
+            array[i].setOmplit(false);
         }
-        
-        
-        
-        
-        int i=0;
-        String s=new String("");s="";
-        Pilot jorge=new Pilot("Jorge");
-        Pilot marc=new Pilot();
-//        marc.setNom("Valentino");
-//        marc.setDinersGuanyats(-3000);
-//        //marc.dinersGuanyats=-1000;
-        //marc.nom="Valentino";
-        //marc.cognoms="Rossi";
-        System.out.println("El pilot "+marc.getNom()+" ha guanyat "+marc.getDinersGuanyats());
-        
-        
-        array[0]=new Pilot();
-        array[0].setNom("Jorge");
-        array[0].setDorsal(99);
-        array[0].setDinersGuanyats(2000);
-        array[0].setHome(true);
-        array[0].setOmplit(true);
-        System.out.println("El pilot "+array[0].getNom()+" ha guanyat "+array[0].getDinersGuanyats());
-        System.out.println(array[0]);
-        String n=array[1].getNom();
-        System.out.println(array[1]);
-        
-        
-        
-        System.exit(0);
+                
         // Les meues propietats        
         String nom = null;
         int dorsal = 0;
         boolean home = false;
         double dinersGuanyats = 0.0;
         boolean omplit = false;
-
-        
-        int opcio;
-
+       
+        //Menú del programa
         do {
             System.out.println("\n\nMenú de l'aplicació.");
             System.out.println("0. Sortir.");
@@ -81,13 +53,16 @@ public class ProjecteJava {
                     System.out.println("Adéu!!");
                     break;
                 case 1:                             //1. Introduïr pilot
-                    if (!omplit) {
+                    //Primer recorrem l'array fins trobar una casella no omplida o arribar al final
+                    int i;
+                    for(i=0; i<array.length && array[i].isOmplit();i++);
+                    if (i<array.length) {
                         System.out.println("\nNom:");
-                        nom = ent.skip("[\r\n]*").nextLine();
+                        array[i].setNom(ent.skip("[\r\n]*").nextLine());
                         System.out.println("Dorsal:");
-                        dorsal = ent.skip("[\r\n]*").nextInt();
+                        array[i].setDorsal(ent.skip("[\r\n]*").nextInt());
                         System.out.println("Diners guanyats:");
-                        dinersGuanyats = ent.skip("[\r\n]*").nextDouble();
+                        array[i].setDinersGuanyats(ent.skip("[\r\n]*").nextDouble());
 
                         char esHome;
                         do {
@@ -95,10 +70,10 @@ public class ProjecteJava {
                             esHome = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
                                                                                                 //per tant només haurem de tractar les lletres majúscules
                         } while (esHome != 'H' && esHome != 'D');
-                        home = (esHome == 'H');     //si esHome conté la 'H' home serà true i sinó false. Fa el mateix que un if_else però és molt més curt
-                        omplit = true;
+                        array[i].setHome(esHome == 'H');     //si esHome conté la 'H' home serà true i sinó false. Fa el mateix que un if_else però és molt més curt
+                        array[i].setOmplit(true);
                     } else {
-                        System.out.println("\nNo hi ha pilots per omplir, si vols primer borra'n.");
+                        System.out.println("\nNo hi caben més pilots, si vols, primer borra'n.");
                     }
                     break;
                 case 2:                             //2. Modificar pilot
