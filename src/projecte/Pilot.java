@@ -10,12 +10,29 @@ package projecte;
  * @author profe
  */
 public class Pilot {
-     // Les meues propietats        
-    private String nom = null;
-    private int dorsal = 0;
-    private boolean home = false;
-    private double dinersGuanyats = 0.0;
-    private boolean omplit = false;
+     // Les meues propietats 
+    private String nom;
+    private int dorsal;
+    private boolean home;
+    private double dinersGuanyats;
+    private boolean omplit;
+
+    public Pilot() {
+    }
+    
+    public Pilot(String nom) {
+        this.nom=nom;
+    }
+    
+    public Pilot(String nom, int dorsal) {
+        this.nom=nom;
+        this.dorsal=dorsal;
+    }
+    
+    @Override
+    public String toString() {
+        return "Pilot{" + "name=" + nom + ", \ndorsal=" + dorsal + ", home=" + home + ", dinersGuanyats=" + dinersGuanyats + '}';
+    }
 
     public String getNom() {
         return nom;
@@ -46,7 +63,8 @@ public class Pilot {
     }
 
     public void setDinersGuanyats(double dinersGuanyats) {
-        this.dinersGuanyats = dinersGuanyats;
+        if(dinersGuanyats<0) System.out.println("Els diners no poden ser negatius!!");
+        else this.dinersGuanyats = dinersGuanyats;
     }
 
     public boolean isOmplit() {
