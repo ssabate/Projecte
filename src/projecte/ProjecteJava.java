@@ -13,10 +13,51 @@ import java.util.Scanner;
  */
 public class ProjecteJava {
 
+    public static final int MAX_PILOTS=2;
+    
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Scanner ent = new Scanner(System.in);
+        //Array on guardarem la informació dels pilots
+        Pilot[] array=new Pilot[MAX_PILOTS];
+        
+        for (int i = 0; i < array.length; i++) {
+            array[i]=new Pilot();
+            
+        }
+        
+        
+        
+        
+        int i=0;
+        String s=new String("");s="";
+        Pilot jorge=new Pilot("Jorge");
+        Pilot marc=new Pilot();
+//        marc.setNom("Valentino");
+//        marc.setDinersGuanyats(-3000);
+//        //marc.dinersGuanyats=-1000;
+        //marc.nom="Valentino";
+        //marc.cognoms="Rossi";
+        System.out.println("El pilot "+marc.getNom()+" ha guanyat "+marc.getDinersGuanyats());
+        
+        
+        array[0]=new Pilot();
+        array[0].setNom("Jorge");
+        array[0].setDorsal(99);
+        array[0].setDinersGuanyats(2000);
+        array[0].setHome(true);
+        array[0].setOmplit(true);
+        System.out.println("El pilot "+array[0].getNom()+" ha guanyat "+array[0].getDinersGuanyats());
+        System.out.println(array[0]);
+        String n=array[1].getNom();
+        System.out.println(array[1]);
+        
+        
+        
+        System.exit(0);
         // Les meues propietats        
         String nom = null;
         int dorsal = 0;
@@ -24,7 +65,7 @@ public class ProjecteJava {
         double dinersGuanyats = 0.0;
         boolean omplit = false;
 
-        Scanner ent = new Scanner(System.in);
+        
         int opcio;
 
         do {
