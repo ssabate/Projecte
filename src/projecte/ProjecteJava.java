@@ -12,9 +12,8 @@ import java.util.Scanner;
  * @author profe
  */
 public class ProjecteJava {
-
     //Número de caselles màxim de l'array
-    private static final int MAX_PILOTS=5;
+    private static final int MAX_PILOTS=1;
     //Array on guardarem la informació dels pilots
     private static Pilot[] array=new Pilot[MAX_PILOTS];
     
@@ -41,6 +40,7 @@ public class ProjecteJava {
        
         //Menú del programa
         do {
+            char siNo;
             System.out.println("\n\nMenú de l'aplicació.");
             System.out.println("0. Sortir.");
             System.out.println("1. Introduïr pilot.");
@@ -53,9 +53,10 @@ public class ProjecteJava {
                     System.out.println("Adéu!!");
                     break;
                 case 1:                             //1. Introduïr pilot
-                    //Primer recorrem l'array fins trobar una casella no omplida o arribar al final
+                    //Primer recorrem l'array fins trobar una casella no omplida o arribar al seu final
                     int i;
                     for(i=0; i<array.length && array[i].isOmplit();i++);
+                    //Si no hem arribat al final és per que hem trobat una casella buida (no omplida)
                     if (i<array.length) {
                         System.out.println("\nNom:");
                         array[i].setNom(ent.skip("[\r\n]*").nextLine());
@@ -77,85 +78,81 @@ public class ProjecteJava {
                     }
                     break;
                 case 2:                             //2. Modificar pilot
-                    if (omplit) {
-                        char siNo;
-                        do {
-                            System.out.println("\nVols vore el pilot?(S/N):");
-                            siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
+                    //Primer recorrem l'array buscant caselles omplides i preguntant quina volem modificar
+                    siNo='N';
+                    int cont=1;
+                    for(i=0; i<array.length && siNo!='S' && siNo!='F';i++){
+                        if(array[i].isOmplit()){
+                            System.out.format("\nPilot %d:\n", cont++);
+                            System.out.println(array[i].toString());
+                            do {
+                                System.out.println("\nVols modificar el pilot(S/N) o finalitzar la cerca (F)?:");
+                                siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
                                                                                                 //per tant només haurem de tractar les lletres majúscules
-                        } while (siNo != 'S' && siNo != 'N');
-                        if (siNo == 'S'){
-                            System.out.println("\nNom: "+nom);
-                            System.out.println("Dorsal: "+dorsal);
-                            System.out.println("Diners guanyats: "+dinersGuanyats);
-                            if(home) System.out.println("És home");
-                            else System.out.println("És dona");
-                      }     
-
+                            } while (siNo != 'S' && siNo != 'N' && siNo != 'F');
+                        }
+                        if(siNo=='S') break;
+                    }
+                    //Si l'usuari ha contestat que sí és que ha triat un pilot per modificar    
+                    if (siNo=='S') {
+                            
+                        System.out.println("\nNom: "+array[i].getNom());
                         do {
-                            System.out.println("\nVols modificar el pilot?(S/N):");
+                            System.out.println("\nVols modificar el nom?(S/N):");
                             siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); 
                         } while (siNo != 'S' && siNo != 'N');
                         if (siNo == 'S'){
-                            
-                            System.out.println("\nNom: "+nom);
-                            do {
-                                System.out.println("\nVols modificar el nom?(S/N):");
-                                siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); 
-                            } while (siNo != 'S' && siNo != 'N');
-                            if (siNo == 'S'){
-                                System.out.print("Nou nom: ");
-                                nom = ent.skip("[\r\n]*").nextLine();
-                            }
+                            System.out.print("Nou nom: ");
+                            array[i].setNom(ent.skip("[\r\n]*").nextLine());
+                        }
 
-                            System.out.println("\nDorsal: "+dorsal);
-                            do {
-                                System.out.println("\nVols modificar el dorsal?(S/N):");
-                                siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); 
-                            } while (siNo != 'S' && siNo != 'N');
-                            if (siNo == 'S'){
-                                System.out.print("Nou dorsal: ");
-                                dorsal = ent.skip("[\r\n]*").nextInt();
-                            }
+                        System.out.println("\nDorsal: "+array[i].getDorsal());
+                        do {
+                            System.out.println("\nVols modificar el dorsal?(S/N):");
+                            siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); 
+                        } while (siNo != 'S' && siNo != 'N');
+                        if (siNo == 'S'){
+                            System.out.print("Nou dorsal: ");
+                            array[i].setDorsal(ent.skip("[\r\n]*").nextInt());
+                        }
 
-                            System.out.println("\nDiners guanyats: "+dinersGuanyats);
-                            do {
-                                System.out.println("\nVols modificar els diners guanyats?(S/N):");
-                                siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); 
-                            } while (siNo != 'S' && siNo != 'N');
-                            if (siNo == 'S'){
-                                System.out.print("Nous diners guanyats: ");
-                                dinersGuanyats = ent.skip("[\r\n]*").nextDouble();
-                            }
+                        System.out.println("\nDiners guanyats: "+array[i].getDinersGuanyats());
+                        do {
+                            System.out.println("\nVols modificar els diners guanyats?(S/N):");
+                            siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); 
+                        } while (siNo != 'S' && siNo != 'N');
+                        if (siNo == 'S'){
+                            System.out.print("Nous diners guanyats: ");
+                            array[i].setDinersGuanyats(ent.skip("[\r\n]*").nextDouble());
+                        }
 
-                            if(home) System.out.println("\nÉs home");
-                            else System.out.println("\nÉs dona");
+                        if(array[i].isHome()) System.out.println("\nÉs home");
+                        else System.out.println("\nÉs dona");
+                        do {
+                            System.out.println("\nVols modificar el gènere?(S/N):");
+                            siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); 
+                        } while (siNo != 'S' && siNo != 'N');
+                        if (siNo == 'S'){
+                            char esHome;
                             do {
-                                System.out.println("\nVols modificar el gènere?(S/N):");
-                                siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); 
-                            } while (siNo != 'S' && siNo != 'N');
-                            if (siNo == 'S'){
-                                char esHome;
-                                do {
-                                    System.out.println("És home o dona?(H/D):");
-                                    esHome = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0);
-                                } while (esHome != 'H' && esHome != 'D');
-                                home = (esHome == 'H');     //si esHome conté la 'H' home serà true i sinó false. Fa el mateix que un if_else però és molt més curt
-                                System.out.print("Nou gènere: ");
-                                if(home) System.out.println("home");
-                                else System.out.println("dona");
-                            }
+                                System.out.println("És home o dona?(H/D):");
+                                esHome = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0);
+                            } while (esHome != 'H' && esHome != 'D');
+                            array[i].setHome(esHome == 'H');     //si esHome conté la 'H' home serà true i sinó false. Fa el mateix que un if_else però és molt més curt
+                            System.out.print("Nou gènere: ");
+                            if(array[i].isHome()) System.out.println("home");
+                            else System.out.println("dona");
+                        }
 
-                            System.out.println("Pilot modificat correctament.");
-                        } else System.out.println("Pilot no modificat.");  
+                        System.out.println("Pilot modificat correctament.");
+                        
                         
                     } else {
-                        System.out.println("\nNo hi ha pilots per modificar, si vols primer crea'n.");
+                        System.out.println("\nNo hi ha pilots per modificar, o no n'has triat cap per modificar.");
                     }
                     break;
                 case 3:                                     //3. Borrar pilot
                     if (omplit) {
-                        char siNo;
                         do {
                             System.out.println("\nVols vore el pilot?(S/N):");
                             siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
@@ -198,7 +195,6 @@ public class ProjecteJava {
                     
                     if (!omplit) {
 
-                        char siNo;
                         do {
                             System.out.println("\nVols vore el pilot?(S/N):");
                             siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
