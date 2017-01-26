@@ -176,14 +176,23 @@ public class ProjecteJava {
                     }
                     break;
                 case 4:                                     //4. Llistar pilots
-                    if (omplit) {
-                        System.out.println("\nNom: "+nom);
-                        System.out.println("Dorsal: "+dorsal);
-                        System.out.println("Diners guanyats: "+dinersGuanyats);                        
-                        if(home) System.out.println("És home");
-                        else System.out.println("És dona");
-                    } else {
-                        System.out.println("\nNo hi ha pilots per mostrar, si vols primer crea'n.");
+                    boolean algun=false;
+                    siNo='S';
+                    for (i = 0; i < array.length; i++) {
+                        p=array[i];
+                        if(p.isOmplit()){
+                            algun=true;
+                            System.out.println(p);
+                            do {
+                                System.out.println("\nVols vore més pilots(S/N)?:");
+                                siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
+                                                                                                //per tant només haurem de tractar les lletres majúscules
+                            } while (siNo != 'S' && siNo != 'N');
+                        }
+                        if(siNo=='N') break;                    
+                    }
+                    if (!algun) {
+                        System.out.println("\nNo hi ha pilots per mostrar, si vols, primer crea'n.");                        
                     }                    
                     break;
                 case 5:                                     //5. Recuperar pilot borrat
