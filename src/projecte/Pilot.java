@@ -28,12 +28,17 @@ public class Pilot {
         this.nom=nom;
         this.dorsal=dorsal;
     }
-    
+
     @Override
     public String toString() {
-        return "Pilot{" + "name=" + nom + ", \ndorsal=" + dorsal + ", home=" + home + ", dinersGuanyats=" + dinersGuanyats + '}';
+        
+        return "\nNom: "+nom+
+               "\nDorsal: "+dorsal+
+               "\nDiners guanyats: "+dinersGuanyats+
+               (home?"\nÉs home":"\nÉs dona");
     }
-
+    
+    
     public String getNom() {
         return nom;
     }

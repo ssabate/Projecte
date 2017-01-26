@@ -13,7 +13,7 @@ import java.util.Scanner;
  */
 public class ProjecteJava {
     //Número de caselles màxim de l'array
-    private static final int MAX_PILOTS=1;
+    private static final int MAX_PILOTS=2;
     //Array on guardarem la informació dels pilots
     private static Pilot[] array=new Pilot[MAX_PILOTS];
     
@@ -24,6 +24,7 @@ public class ProjecteJava {
         //Variables locals del main
         Scanner ent = new Scanner(System.in);
         int opcio;      //opció del menú
+        Pilot p=null;   //l'utilizo per apuntar al Pilot de les caselles de l'array
         
         //Inicialitzem l'array en nous pilots sense dades
         for (int i = 0; i < array.length; i++) {
@@ -152,32 +153,26 @@ public class ProjecteJava {
                     }
                     break;
                 case 3:                                     //3. Borrar pilot
-                    if (omplit) {
-                        do {
-                            System.out.println("\nVols vore el pilot?(S/N):");
-                            siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
+                    siNo='N';
+                    for (i = 0; i < array.length; i++) {
+                        p=array[i];
+                        if(p.isOmplit()){
+                            System.out.println(p);
+                            do {
+                                System.out.println("\nVols borrar el pilot(S/N)?:");
+                                siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
                                                                                                 //per tant només haurem de tractar les lletres majúscules
-                        } while (siNo != 'S' && siNo != 'N');
-                        if (siNo == 'S'){
-                            System.out.println("\nNom: "+nom);
-                            System.out.println("Dorsal: "+dorsal);
-                            System.out.println("Diners guanyats: "+dinersGuanyats);
-                            if(home) System.out.println("És home");
-                            else System.out.println("És dona");
-                        }     
-
-                        do {
-                            System.out.println("\nVols borrar el pilot?(S/N):");
-                            siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
-                                                                                                //per tant només haurem de tractar les lletres majúscules
-                        } while (siNo != 'S' && siNo != 'N');
-                        if (siNo == 'S'){
-                            omplit = false;       
-                            System.out.println("Pilot borrat correctament.");
-                        } else System.out.println("Pilot no borrat.");  
+                            } while (siNo != 'S' && siNo != 'N');
+                        }
+                        if(siNo=='S') break;                    
+                    }
+                    
+                    if (i<array.length) {
+                        p.setOmplit(false);       
+                        System.out.println("Pilot borrat correctament.");
                         
                     } else {
-                        System.out.println("\nNo hi ha pilots per borrar, si vols primer crea'n.");
+                        System.out.println("\nNo s'ha borrat cap pilot.");
                     }
                     break;
                 case 4:                                     //4. Llistar pilots
