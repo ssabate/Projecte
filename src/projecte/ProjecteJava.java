@@ -5,6 +5,14 @@
  */
 package projecte;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 /**
@@ -14,11 +22,13 @@ import java.util.Scanner;
 public class ProjecteJava {
 
     //Número de caselles màxim de l'array
-    private static final int MAX_PILOTS = 2;
+    private static final int MAX_PILOTS = 1;
     //Array on guardarem la informació dels pilots
     private static Pilot[] array = new Pilot[MAX_PILOTS];
     //Opció triada per l'usuari
     private static int opcio;
+    //Fitxer usat per persistir la informació
+    private static File fitxer=new File("pilots.db");
 
     /**
      * @param args the command line arguments
@@ -34,9 +44,56 @@ public class ProjecteJava {
     }
 
     public static void inicialitzarVariables() {
-
-        //Inicialitzem l'array en nous pilots sense dades
-        for (int i = 0; i < array.length; i++) {
+        
+        //Índex per recòrrer l'array
+        int i=0;
+        
+        //Busquem el fitxer, i si existix el tractem
+        if(fitxer.exists()){
+            //L'usem per si no caben els objectes del fitxer a l'array poder finalitzar l'execució
+            boolean acabar=false;
+            
+            //Obrim el fitxer per lectura
+            ObjectInputStream lectura=null;
+            try{
+                //Obrim el fitxer per lectura
+                lectura=new ObjectInputStream(new BufferedInputStream(new FileInputStream(fitxer)));
+                
+                while(true){
+                    array[i]=(Pilot) lectura.readObject();
+                    //Incrementar la i per separat ja que sinó dixem una casella a null
+                    i++;
+                }
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                //Si entrem aquí és per que al fitxer hi ha més pilots que els que caben a l'array. 
+                //Podríem avisar a l'usuari i dixar que tanque l'aplicació ja que sinó pot perdre dades...
+                System.err.println("Atenció, no caben tots els objectes. Si continues pots perdre dades. Vols continuar?(S/N):");
+                Scanner ent = new Scanner(System.in);
+                char siNo=' ';
+                do {                    
+                    siNo = ent.skip("[\r\n]*").nextLine().toUpperCase().charAt(0); //usem toUpperCase() que traduix el text introduït per l'usuari a majúscules, 
+                    //per tant només haurem de tractar les lletres majúscules
+                } while (siNo != 'S' && siNo != 'N');
+                if(siNo=='N') acabar=true;
+                
+            } catch (IOException ex) {
+                //Aquí no cal fer res ja que significa que hem arribat al final del fitxer
+            } catch (ClassNotFoundException ex) {
+                //Aquí tampoc cal fer res ja que significa que el fitxer llegit no conté objectes de la classe Pilot
+            }finally{
+                try {
+                    //Molt important tancar el fitxer de lectura
+                    lectura.close();
+                } catch (IOException ex) {
+                    //No cal mostrar res
+                }
+                //Si hem decidit acabar parem l'execucuió
+                if(acabar) System.exit(0);
+            }
+        
+        }
+        //Acabem d'omplir l'array en nous pilots sense dades
+        for (; i < array.length; i++) {
             array[i] = new Pilot();
             array[i].setOmplit(false);
         }
@@ -45,14 +102,24 @@ public class ProjecteJava {
     public static void demanarOpcio() {
         Scanner ent = new Scanner(System.in);
 
-        System.out.println("\n\nMenú de l'aplicació.");
-        System.out.println("0. Sortir.");
-        System.out.println("1. Introduïr pilot.");
-        System.out.println("2. Modificar pilot.");
-        System.out.println("3. Borrar pilot.");
-        System.out.println("4. Llistar pilots.");
-        System.out.println("5. Recuperar pilot borrat.");
-        opcio = ent.skip("[\r\n]*").nextInt();
+        do{
+            System.out.println("\n\nMenú de l'aplicació.");
+            System.out.println("0. Sortir.");
+            System.out.println("1. Introduïr pilot.");
+            System.out.println("2. Modificar pilot.");
+            System.out.println("3. Borrar pilot.");
+            System.out.println("4. Llistar pilots.");
+            System.out.println("5. Recuperar pilot borrat.");
+            try{
+                opcio = ent.nextInt();
+                break;
+            }catch(java.util.InputMismatchException e){
+                System.out.println("Opció incorrecta!!");
+                //Molt important posar el next per evitar bucle infinit
+                ent.next();
+                continue;
+            }
+        }while(true);
 
     }
 
@@ -60,7 +127,7 @@ public class ProjecteJava {
 
         switch (opcio) {
             case 0:                             //0. Sortir
-                System.out.println("Adéu!!");
+                finalitzar();
                 break;
             case 1:                             //1. Introduïr pilot
                 introduirPilot();
@@ -85,6 +152,36 @@ public class ProjecteJava {
 
     public static boolean opcioFinal() {
         return opcio == 0;
+    }
+    
+    public static void finalitzar(){
+        //Obrim el fitxer per escriptura
+        ObjectOutputStream escriptura=null;
+        try{
+            //Obrim el fitxer
+            escriptura=new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(fitxer)));
+
+            //Recorrem l'array guardant els objectes vàlids al fitxer
+            for(int i=0;i<array.length;i++){
+                //Guardem al fitxer els pilots omplits
+                if(array[i].isOmplit())escriptura.writeObject(array[i]);
+            }
+        } catch (IOException ex) {
+            //Aquí podem avisar a l'usuari de que no s'han guardat les dades
+            System.err.println("Error en guardar les dades!!");
+        } finally{
+            try {
+                //Molt important tancar el fitxer d'escriptura
+                escriptura.close();
+            } catch (IOException ex) {
+                //No cal mostrar res
+            }
+
+        }
+
+        //Missatge de comiat
+        System.out.println("Adéu!!");
+
     }
 
     public static void introduirPilot() {
