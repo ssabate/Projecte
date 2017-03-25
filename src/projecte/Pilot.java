@@ -58,7 +58,7 @@ public class Pilot implements Serializable{
         this.nom = nom;
     }
 
-    public int getDorsal() {
+    public int getDorsal() { 
         return dorsal;
     }
 
