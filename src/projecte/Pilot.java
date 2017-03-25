@@ -5,17 +5,28 @@
  */
 package projecte;
 
+import java.io.Serializable;
+
 /**
  *
  * @author profe
  */
-public class Pilot {
-     // Les meues propietats 
-    private String nom;
+public class Pilot implements Serializable{
+    
+    // Les meues propietats
+    private String nom="";
     private int dorsal;
     private boolean home;
     private double dinersGuanyats;
     private boolean omplit;
+
+    public Pilot(String nom, int dorsal, boolean home, double dinersGuanyats, boolean omplit) {
+        this.nom = nom;
+        this.dorsal = dorsal;
+        this.home = home;
+        this.dinersGuanyats = dinersGuanyats;
+        this.omplit = omplit;
+    }
 
     public Pilot() {
     }
@@ -52,7 +63,8 @@ public class Pilot {
     }
 
     public void setDorsal(int dorsal) {
-        this.dorsal = dorsal;
+        if(dorsal<0) System.out.println("El dorsal ha de ser positiu o zero!!");
+        else this.dorsal = dorsal;
     }
 
     public boolean isHome() {
