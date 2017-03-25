@@ -53,7 +53,7 @@ public class ProjecteJava {
         System.out.println("4. Llistar pilots.");
         System.out.println("5. Recuperar pilot borrat.");
         opcio = ent.skip("[\r\n]*").nextInt();
-
+        ent.close();
     }
 
     public static void tractarOpcio() {
@@ -196,7 +196,7 @@ public class ProjecteJava {
         } else {
             System.out.println("\nNo hi ha pilots per modificar, o no n'has triat cap per modificar.");
         }
-
+        ent.close();
     }
 
     public static void borrarPilot() {
