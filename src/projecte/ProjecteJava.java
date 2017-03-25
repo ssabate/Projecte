@@ -19,6 +19,8 @@ public class ProjecteJava {
     private static Pilot[] array = new Pilot[MAX_PILOTS];
     //Opció triada per l'usuari
     private static int opcio;
+    //Scanner general per evitar l'excepció NoSuchElementException 
+    private static Scanner ent=new Scanner(System.in);
 
     /**
      * @param args the command line arguments
@@ -30,7 +32,13 @@ public class ProjecteJava {
             demanarOpcio();
             tractarOpcio();
         } while (!opcioFinal());
+        tractamentFinal();
 
+    }
+
+    public static void tractamentFinal() {
+        //Tanco l'scanner general abans de sortir de l'aplicació
+        ent.close();
     }
 
     public static void inicialitzarVariables() {
@@ -43,7 +51,7 @@ public class ProjecteJava {
     }
 
     public static void demanarOpcio() {
-        Scanner ent = new Scanner(System.in);
+        //Scanner ent = new Scanner(System.in);
 
         System.out.println("\n\nMenú de l'aplicació.");
         System.out.println("0. Sortir.");
@@ -53,7 +61,7 @@ public class ProjecteJava {
         System.out.println("4. Llistar pilots.");
         System.out.println("5. Recuperar pilot borrat.");
         opcio = ent.skip("[\r\n]*").nextInt();
-        ent.close();
+        //ent.close();
     }
 
     public static void tractarOpcio() {
