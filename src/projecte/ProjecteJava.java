@@ -22,13 +22,17 @@ import java.util.Scanner;
 public class ProjecteJava {
 
     //Número de caselles màxim de l'array
-    private static final int MAX_PILOTS = 1;
+    private static final int MAX_PILOTS = 2000;
     //Array on guardarem la informació dels pilots
     private static Pilot[] array = new Pilot[MAX_PILOTS];
     //Opció triada per l'usuari
     private static int opcio;
     //Fitxer usat per persistir la informació
     private static File fitxer=new File("pilots.db");
+
+    public static Pilot[] getArray() {
+        return array;
+    }
 
     /**
      * @param args the command line arguments
@@ -83,7 +87,7 @@ public class ProjecteJava {
             }finally{
                 try {
                     //Molt important tancar el fitxer de lectura
-                    lectura.close();
+                    if(lectura!=null) lectura.close();
                 } catch (IOException ex) {
                     //No cal mostrar res
                 }
@@ -172,7 +176,7 @@ public class ProjecteJava {
         } finally{
             try {
                 //Molt important tancar el fitxer d'escriptura
-                escriptura.close();
+                if(escriptura!=null) escriptura.close();
             } catch (IOException ex) {
                 //No cal mostrar res
             }
