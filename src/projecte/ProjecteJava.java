@@ -198,11 +198,26 @@ public class ProjecteJava {
         if (i < array.length) {
             System.out.println("\nNom:");
             array[i].setNom(ent.skip("[\r\n]*").nextLine());
-            System.out.println("Dorsal:");
-            array[i].setDorsal(ent.skip("[\r\n]*").nextInt());
-            System.out.println("Diners guanyats:");
-            array[i].setDinersGuanyats(ent.skip("[\r\n]*").nextDouble());
-
+            do{
+                try{
+                    System.out.println("Dorsal:");
+                    array[i].setDorsal(ent.nextInt());
+                    break;
+                }catch(java.util.InputMismatchException e){
+                    System.out.println("Dorsal incorrecte!!");
+                    ent.next();
+                }
+            }while(true);
+            do{
+                try{
+                    System.out.println("Diners guanyats:");                
+                    array[i].setDinersGuanyats(ent.nextDouble());
+                    break;
+                }catch(java.util.InputMismatchException e){
+                    System.out.println("No és un número correcte!!");
+                    ent.next();
+                }
+            }while(true);
             char esHome;
             do {
                 System.out.println("És home o dona?(H/D):");
