@@ -16,6 +16,9 @@ import projecte.ProjecteJava;
  */
 public class GUI_exemple extends javax.swing.JFrame {
 
+    //Usada per saber si hi ha alguna fila de la taula seleccionada, i quina és
+    private static int filaSel=-1; 
+    
     /**
      * Creates new form GUI_exemple
      */
@@ -25,10 +28,16 @@ public class GUI_exemple extends javax.swing.JFrame {
     }
 
     private void inicialitzaComponents(){
-    
+        //Si no han seleccionat cap fila desactivo els botons de borrar i modificar
+        botoBorrar.setEnabled(false);
+        botoModificar.setEnabled(false);
+        
+        //Inicialment el pilot serà home
+        opcioHome.setSelected(true);
+        
         ProjecteJava.inicialitzarVariables();
         
-        GUI_UF3.carregaTaula(new String[]{"Nom", "Dorsal", "Diners", "Home"}, 
+        GUI_UF3.carregaTaula(new String[]{"Fila", "Nom", "Dorsal", "Diners", "Home"}, 
                 transformaDades(ProjecteJava.getArray())
 //                new Object[][]{
 //                    {"Marc", 93, 2346.6, true},
@@ -100,6 +109,12 @@ public class GUI_exemple extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        taula.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        taula.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                taulaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(taula);
 
         jLabel1.setText("Nom");
@@ -187,6 +202,38 @@ public class GUI_exemple extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void taulaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taulaMouseClicked
+        //Actualitzo la fila seleccionada 
+        filaSel=taula.getSelectedRow();
+        
+        if(filaSel==-1){    
+            //Si no han seleccionat cap fila desactivo els botons de borrar i modificar
+            botoBorrar.setEnabled(false);
+            botoModificar.setEnabled(false);
+            
+            //Poso les caselles en blanc
+            casellaNom.setText("");
+            casellaDorsal.setText("");
+            casellaGuanys.setText("");
+            opcioHome.setSelected(true);
+        }        
+        else{
+            //Si han seleccionat alguna fila activo els botons de borrar i modificar
+            botoBorrar.setEnabled(true);
+            botoModificar.setEnabled(true);
+            
+            //Actualizo les caselles en la informació de la fila seleccionada
+            casellaNom.setText((String)taula.getValueAt(filaSel, 1));
+            casellaDorsal.setText(String.valueOf(taula.getValueAt(filaSel, 2)));
+            casellaGuanys.setText(String.valueOf(taula.getValueAt(filaSel, 3)));
+            if((boolean)taula.getValueAt(filaSel, 4))
+                opcioHome.setSelected(true);
+            else opcioDona.setSelected(true);
+        }
+        
+        
+    }//GEN-LAST:event_taulaMouseClicked
 
     /**
      * @param args the command line arguments
