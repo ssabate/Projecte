@@ -6,6 +6,7 @@
 package GUI;
 
 import java.util.Arrays;
+import javax.swing.JOptionPane;
 import metodes.GUI_UF3;
 import projecte.Pilot;
 import projecte.ProjecteJava;
@@ -95,8 +96,14 @@ public class GUI_exemple extends javax.swing.JFrame {
         botoInserir = new javax.swing.JButton();
         botoModificar = new javax.swing.JButton();
         botoBorrar = new javax.swing.JButton();
+        botoSortir = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         taula.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -132,8 +139,20 @@ public class GUI_exemple extends javax.swing.JFrame {
         botoInserir.setText("Inserir");
 
         botoModificar.setText("Modificar");
+        botoModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botoModificarActionPerformed(evt);
+            }
+        });
 
         botoBorrar.setText("Borrar");
+
+        botoSortir.setText("Sortir");
+        botoSortir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botoSortirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -148,14 +167,7 @@ public class GUI_exemple extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(opcioDona)
-                            .addComponent(opcioHome)
-                            .addComponent(casellaNom, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(casellaDorsal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(casellaGuanys, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel3)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(125, 125, 125)
                         .addComponent(botoModificar)
@@ -163,6 +175,14 @@ public class GUI_exemple extends javax.swing.JFrame {
                         .addComponent(botoBorrar)
                         .addGap(167, 167, 167)
                         .addComponent(botoInserir)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(opcioDona)
+                    .addComponent(opcioHome)
+                    .addComponent(casellaNom, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(casellaDorsal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(casellaGuanys, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botoSortir, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
@@ -196,7 +216,8 @@ public class GUI_exemple extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botoModificar)
                     .addComponent(botoBorrar)
-                    .addComponent(botoInserir))
+                    .addComponent(botoInserir)
+                    .addComponent(botoSortir))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
@@ -234,6 +255,63 @@ public class GUI_exemple extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_taulaMouseClicked
+
+    private boolean dadesCorrectes(){
+    
+        try {
+            //casellaNom.getText().trim().charAt(0);
+            if(casellaNom.getText().trim().equals("")) throw new StringIndexOutOfBoundsException();
+            Integer.valueOf(casellaDorsal.getText());
+            Double.valueOf(casellaGuanys.getText());
+        } catch (StringIndexOutOfBoundsException|NumberFormatException e) {
+            return false;
+        }
+    
+        return true;
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    private void botoModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoModificarActionPerformed
+        
+        //Primer miro si les dades de les caselles són correctes. Si no ho són mostro
+        //un advertiment i acabo l'execució del mètode
+        if(!dadesCorrectes()){
+            JOptionPane.showMessageDialog(this, "Dades de les caselles incorrectes!!");
+            return;
+        }
+        
+        // Obtenim l'índex de l'array a partir del valor de la columna 0 de la taula
+        int iArray=(int)taula.getValueAt(filaSel, 0);
+        Pilot[] array=ProjecteJava.getArray();
+        
+        array[iArray].setNom(casellaNom.getText().trim());
+        array[iArray].setDorsal(Integer.valueOf(casellaDorsal.getText()));
+        array[iArray].setDinersGuanyats(Double.valueOf(casellaGuanys.getText()));
+        array[iArray].setHome(opcioHome.isSelected());
+        
+        GUI_UF3.carregaTaula(new String[]{"Fila", "Nom", "Dorsal", "Diners", "Home"}, 
+                transformaDades(ProjecteJava.getArray())
+                , taula);
+        JOptionPane.showMessageDialog(this, "Dades modificades!!");
+    }//GEN-LAST:event_botoModificarActionPerformed
+
+    private void botoSortirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botoSortirActionPerformed
+        // TODO add your handling code here:
+        
+        ProjecteJava.finalitzar();
+        System.exit(1);
+    }//GEN-LAST:event_botoSortirActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        ProjecteJava.finalitzar();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -274,6 +352,7 @@ public class GUI_exemple extends javax.swing.JFrame {
     private javax.swing.JButton botoBorrar;
     private javax.swing.JButton botoInserir;
     private javax.swing.JButton botoModificar;
+    private javax.swing.JButton botoSortir;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField casellaDorsal;
     private javax.swing.JTextField casellaGuanys;
